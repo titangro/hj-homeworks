@@ -6,21 +6,18 @@ function changeImage() {
 	const currentImageName = currentImage.src.slice(currentImage.src.search(/\/i\//g)+3);	
 	if (this.id === 'prevPhoto') {			
 		if (i > 0) {
-			i--;					
-			currentImage.src = './i/' + images[i];
+			i--;
 		} else {
-			i = images.length - 1;
-			currentImage.src = './i/' + images[i];
+			i = images.length - 1;			
 		}
 	} else {		
 		if (i < images.length - 1) {
-			i++;
-			currentImage.src = './i/' + images[i];
+			i++;			
 		} else {
 			i = 0;
-			currentImage.src = './i/' + images[i];				
 		}
 	}
+	currentImage.src = './i/' + images[i];
 }
 for (const btnId of ['prevPhoto', 'nextPhoto']) {
 	const btn = document.getElementById(btnId);
