@@ -11,7 +11,7 @@ function playPiano() {
 		buttons[i].addEventListener('click', (event) => {
 			event.preventDefault();
 			players[i].currentTime = 0;
-			players[i].play();
+			players[i].play();		
 		})
 	}
 }
@@ -45,8 +45,11 @@ function updatePlayer(event) {
 			bindingsUp[event.code]();			
 		}		
 	}
+	if (event.repeat) {
+		return;
+	}
 	playPiano();
 }
 playPiano();
-document.addEventListener('keydown', updatePlayer)
-document.addEventListener('keyup', updatePlayer)
+document.addEventListener('keydown', updatePlayer);
+document.addEventListener('keyup', updatePlayer);
