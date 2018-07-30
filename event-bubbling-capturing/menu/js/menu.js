@@ -1,6 +1,6 @@
 'use strict';
 
-function toggleMenu(event) {
+function toggleMenu(event) {	
   if (this.classList.contains('show')) {
     this.classList.remove('show');
     this.classList.add('hide');
@@ -11,6 +11,8 @@ function toggleMenu(event) {
 }
 
 function openLink(event) {
+  event.preventDefault();
+  event.stopPropagation();
   console.log(this.textContent);
 }
 
