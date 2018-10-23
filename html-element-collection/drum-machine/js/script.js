@@ -6,6 +6,6 @@ function playDrum() {
 	document.getElementsByClassName('player '+key)[0].currentTime = 0;
 	document.getElementsByClassName('player '+key)[0].play();
 }
-for (let button of buttons) {
+Array.from(buttons).forEach((button) => {
 	button.onclick = playDrum;
-}
+});
