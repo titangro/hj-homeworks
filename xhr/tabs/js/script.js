@@ -34,7 +34,6 @@ function changeShower(event) {
 }
 
 function onLoadStart() {
-	console.log(1)
 	loading.classList.remove('hidden');
 }
 
