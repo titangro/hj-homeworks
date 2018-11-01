@@ -8,8 +8,13 @@ content.innerHTML = "";
 xhr.open('GET', 'https://neto-api.herokuapp.com/book/', true);
 xhr.send();
 
+xhr.addEventListener('readystatechange', onReadyState);
 xhr.addEventListener('load', onLoad);
 
+function onReadyState(event) {
+	const { readyState } = event.target;
+	console.log(readyState)
+}
 function onLoad() {
 	const books = JSON.parse(xhr.responseText);
 	for (let i = 0; i < books.length; i++) {

@@ -3,6 +3,7 @@ const xhr = new XMLHttpRequest(),
 	buttons = document.querySelectorAll('a'),
 	shower = document.getElementById('content'),
 	loading = document.getElementById('preloader');
+let smsContent, emailContent;
 
 openXhr(document.querySelector('.email').getAttribute('href'));
 
@@ -26,11 +27,13 @@ function onLoad(event) {
 
 function changeShower(event) {
 	event.preventDefault();
-	openXhr(event.target.href);
-	Array.from(buttons).forEach( item => {
-		item.classList.remove('active');
-	});
-	event.target.classList.add('active');
+	if (!event.target.classList.contains('active')) {
+		openXhr(event.target.href);
+		Array.from(buttons).forEach( item => {
+			item.classList.remove('active');
+		});
+		event.target.classList.add('active');
+	}
 }
 
 function onLoadStart() {
