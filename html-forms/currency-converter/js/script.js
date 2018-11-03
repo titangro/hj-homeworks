@@ -34,10 +34,9 @@ function onLoad() {
 		optionAll = from.querySelectorAll('option');
 		currentOption = optionAll[optionAll.length - 1];
 		currentOption.value = currency[i].value;
-		currentOption.title = currency[i].title;
-
-		onChangeCurrancy();
+		currentOption.title = currency[i].title;		
 	}
+	onChangeCurrancy();
 }
 
 function onLoadStart() {
