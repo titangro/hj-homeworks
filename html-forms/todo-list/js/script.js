@@ -11,17 +11,17 @@ for (let task of tasks) {
 	}
 }
 
-result.value = `${completedCount} из ${tasks.length}`;
 checkCompleteTasks();
+showResult();
 
 function changeCompleteTask(event) {
 	if (event.currentTarget.checked) {
 		completedCount++;
 	} else {
 		completedCount--;
-	}
-	result.value = `${completedCount} из ${tasks.length}`;
+	}	
 	checkCompleteTasks();
+	showResult();
 }
 
 function checkCompleteTasks() {
@@ -30,4 +30,8 @@ function checkCompleteTasks() {
 	} else {
 		form.classList.remove('complete')
 	}
+}
+
+function showResult() {
+	result.value = `${completedCount} из ${tasks.length}`;
 }
