@@ -27,6 +27,7 @@ function onLoad(event) {
 
 function changeShower(event) {
 	event.preventDefault();
+	if (!event.target.classList.contains('active')) {	
 		openXhr(event.target.href);
 		Array.from(buttons).forEach( item => {
 			item.classList.remove('active');

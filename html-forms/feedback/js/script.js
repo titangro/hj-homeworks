@@ -30,8 +30,9 @@ function activateSubmit() {
 function checkIndex(event) {
 	let number = +event.currentTarget.value,
 		item = event.currentTarget;
-	if (Number.isNaN(number)) {
+	if (Number.isNaN(number)) {		
 		item.value = item.value.slice(0, item.value.length - 1);
+		activateSubmit();
 	}
 }
 
