@@ -4,28 +4,29 @@ const counter = document.getElementById('counter'),
 	decrement = document.getElementById('decrement'),
 	reset = document.getElementById('reset');
 
-if(!document.cookie) {
-	document.cookie = 0;
+if(!localStorage.count) {
+	localStorage.count = 0;
 }
-counter.textContent = document.cookie;
+
+counter.textContent = localStorage.count;
 
 increment.addEventListener('click', increaseCounter);
 decrement.addEventListener('click', decreaseCounter);
 reset.addEventListener('click', resetCounter);
 
 function increaseCounter(event) {
-	document.cookie = +document.cookie + 1;
-	counter.textContent = document.cookie;
+	localStorage.count = +localStorage.count + 1;
+	counter.textContent = localStorage.count;
 }
 
 function decreaseCounter(event) {
-	if (document.cookie > 0) {
-		document.cookie = +document.cookie - 1;
-		counter.textContent = document.cookie;
+	if (localStorage.count > 0) {
+		localStorage.count = +localStorage.count - 1;
+		counter.textContent = localStorage.count;
 	}	
 }
 
 function resetCounter(event) {
-	document.cookie = 0;
-	counter.textContent = document.cookie;
+	localStorage.count = 0;
+	counter.textContent = localStorage.count;
 }
