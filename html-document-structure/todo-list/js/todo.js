@@ -7,10 +7,10 @@ Array.from(todoList).forEach(item => item.addEventListener('click', changeLocati
 function changeLocation(event) {
 	const currentElement = event.currentTarget.parentElement;	
 	if (currentElement.parentElement.nextElementSibling) {
-		currentElement.firstElementChild.removeAttribute('checked', '');
+		event.target.checked = false;
 		undone.appendChild(currentElement);
-	} else {		
-		currentElement.firstElementChild.setAttribute('checked', '');
+	} else {
+		event.target.checked = true;
 		done.appendChild(currentElement);
 	}
 }
