@@ -37,13 +37,12 @@ function singIn(event) {
 function singUp(event) {
 	event.preventDefault();
 	const formDataSingUp = new FormData(singUpForm);
-	const form = new FormData()
 	for (const [key, value] of formDataSingUp) {
-		form.append('key', 'value');
+		console.log(key + ': ' + value);
 	}
-	console.log(form)
+	console.log(formDataSingUp)
 	fetch('https://neto-api.herokuapp.com/signup', {
-		body: JSON.stringify(form),
+		body: JSON.stringify(formDataSingUp),
 		credentials: 'same-origin',
 		method: 'POST',
 		headers: {
