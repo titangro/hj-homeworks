@@ -2,21 +2,26 @@
 	const singInForm = document.querySelector('.sign-in-htm'),
 		singUpForm = document.querySelector('.sign-up-htm');
 
-	singUpForm.addEventListener('submit', singUp);
 	singInForm.addEventListener('submit', singIn);
+	singUpForm.addEventListener('submit', singUp);
 
 	function singIn(event) {
 		event.preventDefault();
-		const formDataSingIn = new FormData(singInForm);	
+		const formDataSingIn = new FormData(singInForm);
+		const formData = {};
+
+		for (const [key, value] of formDataSingIn) {
+			formData[key] = value;
+		}
+
 		fetch('https://neto-api.herokuapp.com/signin', {
-			body: JSON.stringify(formDataSingIn),
+			body: JSON.stringify(formData),
 			credentials: 'same-origin',
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' }
 		})
 			.then((res) => {
 				if (200 <= res.status && res.status < 300) {
-					console.log(res)			
 					return res;
 				}
 				throw new Error(response.statusText);
@@ -36,22 +41,22 @@
 
 	function singUp(event) {
 		event.preventDefault();
+		let inputs = event.target.querySelectorAll('input');		
 		const formDataSingUp = new FormData(singUpForm);
+		const formData = {};
+
 		for (const [key, value] of formDataSingUp) {
-			console.log(key + ': ' + value);
+			formData[key] = value;
 		}
-		console.log(formDataSingUp)
+
 		fetch('https://neto-api.herokuapp.com/signup', {
-			body: JSON.stringify(formDataSingUp),
+			body: JSON.stringify(formData),
 			credentials: 'same-origin',
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			}
+			headers: { 'Content-Type': 'application/json' }
 		})
 			.then((res) => {
 				if (200 <= res.status && res.status < 300) {
-					console.log(res);
 					return res;
 				}
 				throw new Error(response.statusText);
