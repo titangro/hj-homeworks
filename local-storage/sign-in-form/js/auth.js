@@ -24,7 +24,7 @@
 				if (200 <= res.status && res.status < 300) {
 					return res;
 				}
-				throw new Error(response.statusText);
+				throw new Error(res.statusText);
 			})
 			.then((res) => { return res.json(); })
 			.then((data) => {
