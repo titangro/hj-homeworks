@@ -9,7 +9,6 @@ function changeLocation(event) {
 	if (event.target.checked) {
 		done.appendChild(currentElement);
 	} else {
-		event.target.checked = true;
 		undone.appendChild(currentElement);
 	}
 }
