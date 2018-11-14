@@ -17,23 +17,20 @@ function moveSlide(event) {
 
     switch (event.target.dataset.action) {
     	case 'prev': 
-    		activatedSlide = currentSlide.previousElementSibling;
-    		activatedSlide.classList.add('slide-current');
+    		activatedSlide = currentSlide.previousElementSibling;    		
     		break;
     	case 'first': 
-    		activatedSlide = currentSlide.parentElement.firstElementChild;
-    		activatedSlide.classList.add('slide-current');
+    		activatedSlide = currentSlide.parentElement.firstElementChild;    		
     		break;
     	case 'next': 
-    		activatedSlide = currentSlide.nextElementSibling;
-    		activatedSlide.classList.add('slide-current');
+    		activatedSlide = currentSlide.nextElementSibling;    		
     		break;
     	case 'last': 
-    		activatedSlide = currentSlide.parentElement.lastElementChild;
-    		activatedSlide.classList.add('slide-current');
+    		activatedSlide = currentSlide.parentElement.lastElementChild;    		
     		break;
     }
-    currentSlide.classList.remove('slide-current');    
+    activatedSlide.classList.add('slide-current');
+    currentSlide.classList.remove('slide-current');
 }
 
 function updateButtons(event) {

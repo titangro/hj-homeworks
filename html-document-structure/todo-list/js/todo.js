@@ -6,11 +6,10 @@ Array.from(todoList).forEach(item => item.addEventListener('click', changeLocati
 
 function changeLocation(event) {
 	const currentElement = event.currentTarget.parentElement;	
-	if (currentElement.parentElement.nextElementSibling) {
-		event.target.checked = false;
-		undone.appendChild(currentElement);
+	if (event.target.checked) {
+		done.appendChild(currentElement);
 	} else {
 		event.target.checked = true;
-		done.appendChild(currentElement);
+		undone.appendChild(currentElement);
 	}
 }
