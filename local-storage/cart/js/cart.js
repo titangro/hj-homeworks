@@ -4,6 +4,9 @@ const colorSwatch = document.querySelector('#colorSwatch');
 const sizeSwatch = document.querySelector('#sizeSwatch');
 const quickCart = document.querySelector('#quick-cart');
 const formCart = document.querySelector('#AddToCartForm');
+//const buttonAddCart = document.querySelector('#AddToCart');
+
+formCart.addEventListener('submit', addToCart);
 
 const urls = [
 	{value: 'https://neto-api.herokuapp.com/cart/colors', type: 'colors'},
@@ -89,7 +92,7 @@ function updateCart(data, type) {
 	}
 
 	if (type === 'cart') {
-		let result = '';
+		let result = '', totalPrice = 0, totalQuantity = 0;
 
 		data.forEach(item => {
 			result += `<div class="quick-cart-product quick-cart-product-static" id="quick-cart-product-${item.id}" style="opacity: 1;">`;
@@ -101,9 +104,56 @@ function updateCart(data, type) {
 			result += `<span class="count hide fadeUp" id="quick-cart-product-count-${item.id}">${item.quantity}</span>`;
 			result += `<span class="quick-cart-product-remove remove" data-id="${item.id}"></span>`;
 			result += `</div>`;
+			totalQuantity += +item.quantity;
+			totalPrice += +item.price
 		});
 
-		quickCart.innerHTML = result;
+		let snippetCart = '';
+		snippetCart += '<a id="quick-cart-pay" quickbeam="cart-pay" class="cart-ico'
+		if (totalQuantity) {
+			snippetCart += `open`;
+		}
+  		snippetCart += `"><span><strong class="quick-cart-text">Оформить заказ<br></strong><span id="quick-cart-price">`;
+  		snippetCart += totalPrice.toFixed(2);
+  		snippetCart += `</span></span></a>`;
+
+  		quickCart.innerHTML = result;
+  		quickCart.innerHTML += snippetCart;
+
+  		if (totalQuantity) {
+  			quickCart.querySelector('.remove').addEventListener('click', deleteFromCart);
+  		}
 	}
-	console.log(data, type)
+	console.log(data, type);	
+}
+
+function addToCart(event) {
+	event.preventDefault();	
+	fetch('https://neto-api.herokuapp.com/cart', {
+		body: JSON.stringify({'productId': event.target.dataset.productId}),
+		credentials: 'same-origin',
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' }
+	})
+	.then((res) => {
+		if (200 <= res.status && res.status < 300) {
+			return res;
+		}
+		throw new Error(response.statusText);
+		console.log(data)
+	})
+	.then((res) => { return res.json(); })
+	.then((data) => {
+		if (data.error) {
+			throw new Error(data.message);
+		}
+		console.log(data);
+	})
+	.catch((error) => {
+		console.log(error, error.message);
+	})
+}
+
+function deleteFromCart(event) {
+
 }
