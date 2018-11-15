@@ -4,9 +4,15 @@ const colorSwatch = document.querySelector('#colorSwatch');
 const sizeSwatch = document.querySelector('#sizeSwatch');
 const quickCart = document.querySelector('#quick-cart');
 const formCart = document.querySelector('#AddToCartForm');
+
+if (!localStorage.localCart) {
+	localStorage.localCart = '';
+}
+
 //const buttonAddCart = document.querySelector('#AddToCart');
 
 formCart.addEventListener('submit', addToCart);
+formCart.addEventListener('change', changeLocalCart);
 
 const urls = [
 	{value: 'https://neto-api.herokuapp.com/cart/colors', type: 'colors'},
@@ -38,10 +44,11 @@ function getParam(url, type) {
 }
 
 function updateCart(data, type) {
+	let params = JSON.parse(localStorage.localCart);	
 	if (type === 'colors') {		
 		let result = '';
 
-		data.forEach(item => {
+		data.forEach(item => {			
 			result += `<div data-value="${item.type}" class="swatch-element color ${item.type}`;
 			if (item.isAvailable) {
 				result += ' available';
@@ -53,7 +60,7 @@ function updateCart(data, type) {
 			if (!item.isAvailable) {
 				result += ' disabled';
 			} else {
-				if (item.checked) result += ' checked';
+				if (item.type === params.color) result += ' checked';
 			}
 			result += `><label for="swatch-1-${item.type}" style="border-color: ${item.type};">`;
 			result += `<span style="background-color: ${item.code};"></span>`;
@@ -79,7 +86,7 @@ function updateCart(data, type) {
 			if (!item.isAvailable) {
 				result += ' disabled';
 			} else {
-				if (item.checked) result += ' checked';
+				if (item.type === params.size) result += ' checked';
 			}
 			result += `><label for="swatch-0-${item.type}">`;
 			result += `${item.title}`;
@@ -124,12 +131,41 @@ function updateCart(data, type) {
   			quickCart.querySelector('.remove').addEventListener('click', deleteFromCart);
   		}
 	}
-	console.log(data, type);	
 }
 
 function addToCart(event) {
 	event.preventDefault();	
+	console.log(localStorage.localCart);
+
 	fetch('https://neto-api.herokuapp.com/cart', {
+		body: localStorage.localCart,
+		credentials: 'same-origin',
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' }
+	})
+	.then((res) => {
+		if (200 <= res.status && res.status < 300) {
+			return res;
+		}
+		throw new Error(response.statusText);		
+	})
+	.then((res) => {
+		return res.json(); 
+	})
+	.then((data) => {
+		if (data.error) {
+			throw new Error(data.message);
+		}
+		console.log(data);
+	})
+	.catch((error) => {
+		console.log(error, error.message);
+	})
+}
+
+function deleteFromCart(event) {
+	event.preventDefault();
+	fetch('https://neto-api.herokuapp.com/cart/remove', {
 		body: JSON.stringify({'productId': event.target.dataset.productId}),
 		credentials: 'same-origin',
 		method: 'POST',
@@ -154,6 +190,14 @@ function addToCart(event) {
 	})
 }
 
-function deleteFromCart(event) {
+function changeLocalCart(event) {
+	const form = {}
+	const formData = new FormData(event.currentTarget);
+	formData.append('productId', event.currentTarget.dataset.productId);
 
+	for (const [key, value] of formData) {
+		form[key] = value;
+	}
+
+	localStorage.localCart = JSON.stringify(form);	
 }
