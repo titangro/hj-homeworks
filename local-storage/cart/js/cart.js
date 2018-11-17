@@ -140,11 +140,14 @@ function updateCart(data, type) {
 }
 
 function addToCart(event) {
-	event.preventDefault();		
+	event.preventDefault();	
+	//let formData = new FormData(formCart);
+	//formData.append('productId', event.currentTarget.dataset.productId);
 	console.log(event.currentTarget.dataset.productId);
 	console.log({productId: event.currentTarget.dataset.productId,data: JSON.parse(localStorage.localCart)})
 	fetch('https://neto-api.herokuapp.com/cart', {
-		body: JSON.stringify({'productId': event.currentTarget.dataset.productId,'data': JSON.parse(localStorage.localCart)}),
+		//body: JSON.stringify(formData),
+		body: JSON.stringify({productId: event.currentTarget.dataset.productId,data: JSON.parse(localStorage.localCart)}),
 		credentials: 'same-origin',
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json; charset=utf-8' }
