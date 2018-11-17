@@ -31,7 +31,9 @@ function getParam(url, type) {
 		}		
 		throw new Error(res.statusText);
 	})
-	.then((res) => { return res.json(); })
+	.then((res) => { 
+		return res.json(); 
+	})
 	.then((data) => {			
 		if (data.error) {
 			throw new Error(data.message);
@@ -44,7 +46,11 @@ function getParam(url, type) {
 }
 
 function updateCart(data, type) {
-	let params = JSON.parse(localStorage.localCart);	
+	let params;	
+	if (localStorage.localCart) {
+		params = JSON.parse(localStorage.localCart);
+	}
+	
 	if (type === 'colors') {		
 		let result = '';
 
@@ -60,7 +66,7 @@ function updateCart(data, type) {
 			if (!item.isAvailable) {
 				result += ' disabled';
 			} else {
-				if (item.type === params.color) result += ' checked';
+				if (params && item.type === params.color) result += ' checked';
 			}
 			result += `><label for="swatch-1-${item.type}" style="border-color: ${item.type};">`;
 			result += `<span style="background-color: ${item.code};"></span>`;
@@ -86,7 +92,7 @@ function updateCart(data, type) {
 			if (!item.isAvailable) {
 				result += ' disabled';
 			} else {
-				if (item.type === params.size) result += ' checked';
+				if (params && item.type === params.size) result += ' checked';
 			}
 			result += `><label for="swatch-0-${item.type}">`;
 			result += `${item.title}`;
@@ -134,8 +140,7 @@ function updateCart(data, type) {
 }
 
 function addToCart(event) {
-	event.preventDefault();	
-	console.log(localStorage.localCart);
+	event.preventDefault();		
 
 	fetch('https://neto-api.herokuapp.com/cart', {
 		body: localStorage.localCart,
@@ -150,6 +155,7 @@ function addToCart(event) {
 		throw new Error(response.statusText);		
 	})
 	.then((res) => {
+		console.log(res)
 		return res.json(); 
 	})
 	.then((data) => {
@@ -194,7 +200,7 @@ function changeLocalCart(event) {
 	const form = {}
 	const formData = new FormData(event.currentTarget);
 	formData.append('productId', event.currentTarget.dataset.productId);
-	formData.append('data', event.currentTarget.dataset.productId);
+	//formData.append('data', event.currentTarget.dataset.productId);
 
 	for (const [key, value] of formData) {
 		form[key] = value;
