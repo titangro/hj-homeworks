@@ -141,9 +141,10 @@ function updateCart(data, type) {
 
 function addToCart(event) {
 	event.preventDefault();		
-
+	console.log(event.currentTarget.dataset.productId);
+	console.log({productId: event.currentTarget.dataset.productId,data: JSON.parse(localStorage.localCart)})
 	fetch('https://neto-api.herokuapp.com/cart', {
-		body: localStorage.localCart,
+		body: JSON.stringify({'productId': event.currentTarget.dataset.productId,'data': JSON.parse(localStorage.localCart)}),
 		credentials: 'same-origin',
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json; charset=utf-8' }
@@ -169,10 +170,10 @@ function addToCart(event) {
 
 function deleteFromCart(event) {
 	event.preventDefault();
-	let obj = {};
-	obj.productId = event.target.dataset.id;
+	let productId = event.target.dataset.id;
+	console.log(JSON.stringify({'productId': productId, 'data': {}}));
 	fetch('https://neto-api.herokuapp.com/cart/remove', {
-		body: JSON.stringify(obj),
+		body: JSON.stringify({'productId': productId, 'data': {}}),
 		credentials: 'same-origin',
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' }
@@ -199,7 +200,7 @@ function deleteFromCart(event) {
 function changeLocalCart(event) {
 	const form = {}
 	const formData = new FormData(event.currentTarget);
-	formData.append('productId', event.currentTarget.dataset.productId);
+	//formData.append('productId', event.currentTarget.dataset.productId);
 
 	//formData.append('id', event.currentTarget.dataset.productId);	
 	//formData.append('title', document.querySelector('.product-detail h1').textContent);	
