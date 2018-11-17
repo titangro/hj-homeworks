@@ -169,8 +169,10 @@ function addToCart(event) {
 
 function deleteFromCart(event) {
 	event.preventDefault();
+	let obj = {};
+	obj.productId = event.target.dataset.id;
 	fetch('https://neto-api.herokuapp.com/cart/remove', {
-		body: JSON.stringify({'productId': event.target.dataset.productId}),
+		body: JSON.stringify(obj),
 		credentials: 'same-origin',
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' }
@@ -198,7 +200,7 @@ function changeLocalCart(event) {
 	const form = {}
 	const formData = new FormData(event.currentTarget);
 	formData.append('productId', event.currentTarget.dataset.productId);
-	
+
 	//formData.append('id', event.currentTarget.dataset.productId);	
 	//formData.append('title', document.querySelector('.product-detail h1').textContent);	
 	//formData.append('pic', document.querySelector('#big-image'));	
