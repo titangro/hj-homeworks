@@ -146,7 +146,7 @@ function addToCart(event) {
 		body: localStorage.localCart,
 		credentials: 'same-origin',
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' }
+		headers: { 'Content-Type': 'application/json; charset=utf-8' }
 	})
 	.then((res) => {
 		if (200 <= res.status && res.status < 300) {
@@ -154,15 +154,13 @@ function addToCart(event) {
 		}
 		throw new Error(response.statusText);		
 	})
-	.then((res) => {
-		console.log(res)
+	.then((res) => {		
 		return res.json(); 
 	})
 	.then((data) => {
 		if (data.error) {
 			throw new Error(data.message);
 		}
-		console.log(data);
 	})
 	.catch((error) => {
 		console.log(error, error.message);
@@ -200,11 +198,18 @@ function changeLocalCart(event) {
 	const form = {}
 	const formData = new FormData(event.currentTarget);
 	formData.append('productId', event.currentTarget.dataset.productId);
+	
+	//formData.append('id', event.currentTarget.dataset.productId);	
+	//formData.append('title', document.querySelector('.product-detail h1').textContent);	
+	//formData.append('pic', document.querySelector('#big-image'));	
+	//formData.append('price', event.currentTarget.dataset.productId);
+
 	//formData.append('data', event.currentTarget.dataset.productId);
 
 	for (const [key, value] of formData) {
 		form[key] = value;
 	}
 
-	localStorage.localCart = JSON.stringify(form);	
+	localStorage.localCart = JSON.stringify(form);
+	console.log(localStorage.localCart)
 }
