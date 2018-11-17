@@ -112,13 +112,13 @@ function updateCart(data, type) {
 			result += `<span class="quick-cart-product-remove remove" data-id="${item.id}"></span>`;
 			result += `</div>`;
 			totalQuantity += +item.quantity;
-			totalPrice += +item.price
+			totalPrice += +item.price * +item.quantity;
 		});
 
 		let snippetCart = '';
 		snippetCart += '<a id="quick-cart-pay" quickbeam="cart-pay" class="cart-ico'
 		if (totalQuantity) {
-			snippetCart += `open`;
+			snippetCart += ` open`;
 		}
   		snippetCart += `"><span><strong class="quick-cart-text">Оформить заказ<br></strong><span id="quick-cart-price">`;
   		snippetCart += totalPrice.toFixed(2);
@@ -194,6 +194,7 @@ function changeLocalCart(event) {
 	const form = {}
 	const formData = new FormData(event.currentTarget);
 	formData.append('productId', event.currentTarget.dataset.productId);
+	formData.append('data', event.currentTarget.dataset.productId);
 
 	for (const [key, value] of formData) {
 		form[key] = value;
