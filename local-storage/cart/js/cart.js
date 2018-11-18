@@ -49,8 +49,8 @@ function updateCart(data, type) {
 	let params;	
 	if (localStorage.localCart) {
 		params = JSON.parse(localStorage.localCart);
-	}
-	
+	}	
+
 	if (type === 'colors') {		
 		let result = '';
 
@@ -133,30 +133,45 @@ function updateCart(data, type) {
   		quickCart.innerHTML = result;
   		quickCart.innerHTML += snippetCart;
 
-  		if (totalQuantity) {
+  		if (quickCart.querySelector('.remove')) {
   			quickCart.querySelector('.remove').addEventListener('click', deleteFromCart);
   		}
 	}
 }
 
 function addToCart(event) {
-	event.preventDefault();	
-	//let formData = new FormData(formCart);
-	//formData.append('productId', event.currentTarget.dataset.productId);
-	console.log(event.currentTarget.dataset.productId);
-	console.log({productId: event.currentTarget.dataset.productId,data: JSON.parse(localStorage.localCart)})
+	event.preventDefault();		
+
+	let obj = {}
+	let form = new FormData();
+	let formData = new FormData(formCart);
+	let productId = event.currentTarget.dataset.productId;
+
+	for (const [key, value] of formData) {
+		form.append(key, value);		
+	}
+	form.append('productId', productId);
+
+	for (const [key, value] of form) {
+		if (key === 'quantity') {
+			obj[key] = +value;
+		} else {
+			obj[key] = value;
+		}
+	}
+	console.log(obj);
+
 	fetch('https://neto-api.herokuapp.com/cart', {
-		//body: JSON.stringify(formData),
-		body: JSON.stringify({productId: event.currentTarget.dataset.productId,data: JSON.parse(localStorage.localCart)}),
+		body: form,		
 		credentials: 'same-origin',
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json; charset=utf-8' }
+		//headers: { 'Content-Type': 'multipart/form-data' }
 	})
 	.then((res) => {
 		if (200 <= res.status && res.status < 300) {
 			return res;
 		}
-		throw new Error(response.statusText);		
+		throw new Error(res.statusText);		
 	})
 	.then((res) => {		
 		return res.json(); 
@@ -165,27 +180,36 @@ function addToCart(event) {
 		if (data.error) {
 			throw new Error(data.message);
 		}
+		console.log(data)
 	})
 	.catch((error) => {
 		console.log(error, error.message);
 	})
+
+	urls.forEach(url => {
+		getParam(url.value, url.type);
+	});
 }
 
 function deleteFromCart(event) {
 	event.preventDefault();
-	let productId = event.target.dataset.id;
-	console.log(JSON.stringify({'productId': productId, 'data': {}}));
+	console.log(1)
+	const formData = new FormData();
+	const productId = event.target.dataset.id;
+
+	formData.append('productId', productId);
+	
 	fetch('https://neto-api.herokuapp.com/cart/remove', {
-		body: JSON.stringify({'productId': productId, 'data': {}}),
+		body: formData,
 		credentials: 'same-origin',
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' }
+		method: 'POST'
+		//headers: { 'Content-Type': 'application/json' }
 	})
 	.then((res) => {
 		if (200 <= res.status && res.status < 300) {
 			return res;
 		}
-		throw new Error(response.statusText);
+		throw new Error(res.statusText);
 		console.log(data)
 	})
 	.then((res) => { return res.json(); })
@@ -198,24 +222,19 @@ function deleteFromCart(event) {
 	.catch((error) => {
 		console.log(error, error.message);
 	})
+
+	urls.forEach(url => {
+		getParam(url.value, url.type);
+	});
 }
 
 function changeLocalCart(event) {
 	const form = {}
-	const formData = new FormData(event.currentTarget);
-	//formData.append('productId', event.currentTarget.dataset.productId);
-
-	//formData.append('id', event.currentTarget.dataset.productId);	
-	//formData.append('title', document.querySelector('.product-detail h1').textContent);	
-	//formData.append('pic', document.querySelector('#big-image'));	
-	//formData.append('price', event.currentTarget.dataset.productId);
-
-	//formData.append('data', event.currentTarget.dataset.productId);
+	const formData = new FormData(event.currentTarget);	
 
 	for (const [key, value] of formData) {
 		form[key] = value;
 	}
 
-	localStorage.localCart = JSON.stringify(form);
-	console.log(localStorage.localCart)
+	localStorage.localCart = JSON.stringify(form);	
 }
