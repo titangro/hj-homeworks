@@ -3,11 +3,11 @@
 let random = randName();
 
 function loadData(url) {
-	const functionName = 'parser';
+	const functionName = random;
 	return new Promise((done,fail) => {
 		window[functionName] = done;	
 
-		const script = document.scripts[0].cloneNode();
+		const script = document.createElement('script');
 		script.src = `${url}?callback=${functionName}`;
 		document.body.appendChild(script);		
 	});
@@ -33,9 +33,5 @@ function randName() {
 }
 
 loadData('https://neto-api.herokuapp.com/twitter/jsonp')
-	.then(parseTwitt(newParser()))
+	.then(data => {parseTwitt(data)})
 	.catch((error) => {console.log(error)})
-
-function newParser() {
-	return JSON.parse(`{"username":"@carlf","description":"Carl Fredricksen is the protagonist in Up. He also appeared in Dug's Special Mission as a minor character.","tweets":2934,"followers":1119,"following":530,"wallpaper":"https://neto-api.herokuapp.com/hj/4.1/twitter/up.jpg","pic":"https://neto-api.herokuapp.com/hj/4.1/twitter/carl.jpg"}`)
-}

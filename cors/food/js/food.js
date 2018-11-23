@@ -19,9 +19,8 @@ function loadPromise(functionName, url) {
 	return new Promise((done,fail) => {
 		window[functionName] = done;	
 
-		const script = document.scripts[0].cloneNode();
+		const script = document.creatElemet('script');
 		script.src = `${url}?callback=${functionName}`;
-		document.body.appendChild(script);		
 	});
 }
 
