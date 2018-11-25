@@ -2,15 +2,17 @@
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
-const colors = ['#ffffff', '#ffe9c4', '#d4fbff']
+const colors = ['#ffffff', '#ffe9c4', '#d4fbff'];
+const widthCanvas = canvas.width;
+const heightCanvas = canvas.height;
 
 document.addEventListener('DOMContentLoaded', ganerateStars);
-canvas.addEventListener('click', ganerateStars)
+canvas.addEventListener('click', ganerateStars);
 
 function ganerateStars(event) {
 	ctx.beginPath();	
 	ctx.fillStyle = 'black';	
-	ctx.fillRect(0,0,300,150);
+	ctx.fillRect(0, 0, widthCanvas, heightCanvas);
 	ctx.closePath();
 	const count = randomRange(200, 400);
 	let beginNum = 0;	
@@ -21,8 +23,8 @@ function ganerateStars(event) {
 	//showStar1(100, 100, 10);
 }
 
-function showStar(x = randomRange(0, 300),
-				  y = randomRange(0, 150),
+function showStar(x = randomRange(0, widthCanvas),
+				  y = randomRange(0, heightCanvas),
 				  r = randomRange(0, 11)/10) {	
 	ctx.beginPath();
 	ctx.fillStyle = colors[randomRange(0,2)];
