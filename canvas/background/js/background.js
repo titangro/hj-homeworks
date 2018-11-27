@@ -3,28 +3,89 @@
 const wall = document.querySelector('#wall');
 const ctx = wall.getContext('2d');
 const size = randomRange(1, 6)/10;
+const objects = [];
+const count = randomRange(50, 200);
 
 document.addEventListener('DOMContentLoaded', ganerateBackground);
 
-function ganerateBackground() {
-	
-	const count = randomRange(50, 200);
-	let beginNum = 0;	
+animateBackground();
+
+function animateBackground() {
+	setInterval(function () {
+		window.requestAnimationFrame(repaint);
+	}, 50);
+}
+
+function ganerateBackground() {	
+	let beginNum = 0;
 	while (beginNum < count) {
+		let x = randomRange(0, wall.width);
+		let y = randomRange(0, wall.height);
+		let time = Date.now() + randomRange(0, 10000);
 		if (beginNum % 2) {
-			showCircle( randomRange(0, wall.width),
-						randomRange(0, wall.height),
-						size);
+			showCircle(x, y);
+			addObj(x, y, time, 'circle');
 		} else {
-			showCross(randomRange(0, wall.width),
-					  randomRange(0, wall.height),
-					  size);
+			showCross(x, y, 45);
+			addObj(x, y, time, 'cross');
 		}
 		beginNum++;
 	}
 }
 
-function showCircle(x, y, size) {
+function repaint () {
+  	ctx.clearRect(0, 0, wall.width, wall.height);
+
+  	objects
+    	.forEach((item) => {
+    		item.nextPoint();
+    		if (item.type === 'circle') {
+    			showCircle(item.x, item.y);    			
+    		} else {
+    			item.nextAngle();
+    			showCross(item.x, item.y, item.angle);
+    		} 	
+    	});
+}
+
+function addObj(x, y, time, type, angle = randomRange(0, 360)) {
+	if (type === 'circle') {
+		objects.push({
+			'x':x,
+			'y':y,
+			'nextPoint':function(){
+				const { x, y } = nextPoint(this.x, this.y, time);			
+				this.x = x;
+				this.y = y;
+			},
+			'type':type,
+		});
+	} else {
+		objects.push({
+			'x':x,
+			'y':y,
+			'nextPoint':function(){
+				const { x, y } = nextPoint(this.x, this.y, time);			
+				this.x = x;
+				this.y = y;
+			},
+			'type':type,
+			'angle':angle,
+			'nextAngle':function() {				
+				const degree = randomRange(-2, 2)/10 * 180 / Math.PI;
+				if (this.angle + degree > 360) {
+					this.angle = 360 - this.angle + degree;
+				} else if (this.angle + degree < 0) {
+					this.angle = 360 + this.angle + degree
+				} else {
+					this.angle = this.angle + degree;
+				}
+			}
+		});
+	}
+}
+
+function showCircle(x, y) {
 	ctx.beginPath();
 	ctx.strokeStyle = 'white';
 	ctx.arc(x, y, 12 * size, 0, 2 * Math.PI);
@@ -33,21 +94,30 @@ function showCircle(x, y, size) {
 	ctx.closePath();
 }
 
-function showCross(x, y, size) {
-	ctx.beginPath();
+function showCross(x, y, degree) {
+	const angle = degree * Math.PI / 180,
+		r = Math.sqrt( x**2 + y**2 ),  
+  		a = Math.atan( y / x ),
+		x1 = r * Math.cos( a - angle ),
+  		y1 = r * Math.sin( a - angle ); 
+		
 	ctx.strokeStyle = 'white';
-	ctx.moveTo(x, y);
-	ctx.lineTo(x, y - 10 * size);
-	ctx.lineTo(x, y + 10 * size);
-	ctx.lineTo(x, y);
-	ctx.lineTo(x - 10 * size, y);
-	ctx.lineTo(x + 10 * size, y);	
-	ctx.lineWidth = 5 * size;
+	ctx.lineWidth = 5 * size;	
+	ctx.save();	
+	
+	ctx.beginPath();
+	ctx.rotate(angle);
+	ctx.moveTo(x1, y1);
+	ctx.lineTo(x1, y1 - 10 * size);
+	ctx.lineTo(x1, y1 + 10 * size);
+	ctx.lineTo(x1, y1);
+	ctx.lineTo(x1 - 10 * size, y1);
+	ctx.lineTo(x1 + 10 * size, y1);	
+	ctx.restore();
 	ctx.stroke();
+		
 	ctx.closePath();
 }
-
-//const { x, y } = nextPoint(100, 100, Date.now());
 
 function nextPoint(x, y, time) {	
 	if (randomRange(0, 1)) {
