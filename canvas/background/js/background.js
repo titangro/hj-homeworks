@@ -1,6 +1,8 @@
 'use strict';
 
 const wall = document.querySelector('#wall');
+wall.width = document.documentElement.clientWidth;
+wall.height = document.documentElement.clientHeight;
 const ctx = wall.getContext('2d');
 const size = randomRange(1, 6)/10;
 const objects = [];
