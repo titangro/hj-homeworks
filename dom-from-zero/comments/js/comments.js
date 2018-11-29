@@ -84,17 +84,17 @@ function browserJSEngine(block) {
 		}, document.createDocumentFragment());
 	}
 	const element = document.createElement(block.tag || 'div');
-        element.classList.add(...[].concat(block.class).filter(Boolean));
-        if (block.attrs) {
-            Object.keys(block.attrs).forEach(key => {
-                element.setAttribute(key, block.attrs[key]);
-            });
-        }
-        if (block.content) {
-            element.appendChild(browserJSEngine(block.content));
-        }
+    element.classList.add(...[].concat(block.class).filter(Boolean));
+    if (block.attrs) {
+        Object.keys(block.attrs).forEach(key => {
+           	element.setAttribute(key, block.attrs[key]);
+        });
+    }
+    if (block.content) {
+        element.appendChild(browserJSEngine(block.content));
+    }
 
-        return element;
+    return element;
 }
  
 /*function createComment(comment) {
