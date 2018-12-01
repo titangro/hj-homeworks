@@ -13,8 +13,7 @@ function createElement(node) {
 				frm.appendChild(document.createElement('br'));
 			}
 			return frm;
-		}, document.createDocumentFragment());
-		
+		}, document.createDocumentFragment());		
 	}
 	if (Array.isArray(node)) {
 		return node.reduce((frm, elem) => {
