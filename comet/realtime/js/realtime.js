@@ -1,3 +1,4 @@
+'use strict';
 const ctx = document.getElementById('chart').getContext('2d');
 const realtime = new Chart(ctx).Bar({
   labels: [],
