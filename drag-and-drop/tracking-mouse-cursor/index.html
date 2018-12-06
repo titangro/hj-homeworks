@@ -19,3 +19,50 @@
   </div>
 </body>
 </html>
+
+<script>
+'use strict';
+
+const rightEyePole = document.querySelector('.cat_position_for_right_eye');
+const leftEyePole = document.querySelector('.cat_position_for_left_eye');
+let shiftX = 0;
+let shiftY = 0;
+
+document.addEventListener('mousemove', (event) => {
+	event.preventDefault();
+	const leftEye = document.querySelector('.cat_eye_left');
+	const rightEye = document.querySelector('.cat_eye_right');
+	checkPositionEye(event.pageX, event.pageY, rightEye, rightEyePole);
+	checkPositionEye(event.pageX, event.pageY, leftEye, leftEyePole);
+});
+
+function checkPositionEye(xEye, yEye, eye, pole) {
+	let x, y;
+	//console.log(xEye, yEye, eye, pole)
+
+	const poleSizes = pole.getBoundingClientRect();
+	const bound = eye.getBoundingClientRect();
+	
+	if (xEye <= poleSizes.left) {
+		x = 0;
+	} else if (xEye >= poleSizes.right) {
+		x = pole.offsetWidth/2;
+	} else {		
+		let posX = xEye - poleSizes.left / poleSizes.right - poleSizes.left;
+		x = Math.min(posX, pole.offsetWidth - bound.width);			
+	}	
+
+	if (yEye <= poleSizes.top) {
+		y = 0;
+	} else if (yEye >= poleSizes.bottom) {
+		y = pole.offsetHeight/2;
+	} else {		
+		let posY = yEye - poleSizes.top / poleSizes.bottom - poleSizes.top;		
+		y = Math.min(posY, pole.offsetHeight - bound.height);
+	}
+
+	eye.style.left = x + 'px';
+	eye.style.top = y + 'px';	
+}
+
+</script>
